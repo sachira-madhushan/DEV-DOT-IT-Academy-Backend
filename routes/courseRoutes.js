@@ -5,7 +5,7 @@ const router =express.Router();
 
 router.post("/add",addCourse);
 router.delete("/delete",deleteCourse);
-router.patch("/update",updateCourse);
+router.put("/update",updateCourse);
 router.post("/asign",asignUser);
 router.post("/discharge",dischargeUser);
 router.get("/all",listAllCourses);
