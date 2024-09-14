@@ -60,7 +60,13 @@ export const updateCourse=(req,res)=>{
 }
 
 export const listAllCourses=(req,res)=>{
-    
+    const listQuery="select * from courses";
+
+    db.query(listQuery,[],(err,data)=>{
+        res.status(200).json({
+            course:data
+        })
+    })
 }
 
 export const viewCourse=(req,res)=>{
