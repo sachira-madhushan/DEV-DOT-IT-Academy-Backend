@@ -87,7 +87,97 @@ export const deleteCourse = (req, res) => {
 }
 
 export const updateCourse = (req, res) => {
+    const { c_id, c_title, c_description, c_price, c_instructor, c_banner, c_intro } = req.body;
 
+    const existQuery = "SELECT * FROM courses WHERE c_id = ?";
+
+    db.query(existQuery, [c_id], (err, data) => {
+        if (err) {
+            return res.status(500).json({
+                message: "Internal server error",
+                error: err
+            });
+        }
+
+        if (data.length === 0) {
+            return res.status(404).json({
+                message: "Course not found"
+            });
+        } 
+
+        const updateQuery = `UPDATE courses 
+                             SET c_title = ?, c_description = ?, c_price = ?, c_instructor = ?, c_banner = ?, c_intro = ? 
+                             WHERE c_id = ?`;
+
+        const values = [
+            c_title,
+            c_description,
+            c_price,
+            c_instructor,
+            c_banner,
+            c_intro,
+            c_id
+        ];
+
+        db.query(updateQuery, values, (err, result) => {
+            if (err) {
+                return res.status(500).json({
+                    message: "Internal server error",
+                    //error: err
+                });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    message: "Course not updated"
+                });
+            }
+
+            res.status(200).json({
+                message: "Course updated successfully"
+            });
+        });
+    });
+}
+
+export const updateChapter=(req,res)=>{
+    const { chap_id, c_id, chap_title, chap_description, chap_video } = req.body;
+    const existCourseQuery = "SELECT * FROM courses WHERE c_id = ?";
+
+    db.query(existCourseQuery, [c_id], (err, courseData) => {
+        if (courseData.length === 0) {
+            res.status(404).json({
+                message: "Course not found"
+            });
+        } else {
+            const existChapterQuery = "SELECT * FROM course_chapters WHERE chap_id = ? AND c_id = ?";
+
+            db.query(existChapterQuery, [chap_id, c_id], (err, chapterData) => {
+                if (chapterData.length === 0) {
+                    res.status(404).json({
+                        message: "Chapter not found for the given course"
+                    });
+                } else {
+                    const updateQuery = `UPDATE course_chapters 
+                                         SET chap_title = ?, chap_description = ?, chap_video = ? 
+                                         WHERE chap_id = ? AND c_id = ?`;
+
+                    db.query(updateQuery, [chap_title, chap_description, chap_video, chap_id, c_id], (err, result) => {
+                        if (!err) {
+                            res.status(200).json({
+                                message: "Chapter updated successfully"
+                            });
+                        } else {
+                            res.status(500).json({
+                                message: "Internal server error",
+                                //error: err
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
 }
 
 export const listAllCourses = (req, res) => {
@@ -179,6 +269,7 @@ export const dischargeUser = (req, res) => {
         }
     })
 }
+
 export const listUserCourses = (req, res) => {
 
 }
