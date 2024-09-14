@@ -51,6 +51,7 @@ export const loginAdmin=async(req,res)=>{
             if(await bcrypt.compare(a_password,data[0].a_password)){
                 res.json(
                     {
+                        a_id:data[0].a_id,
                         a_username:data[0].a_username,
                         a_email:data[0].a_email,
                         token:generateToken(data[0].a_id)
@@ -64,12 +65,24 @@ export const loginAdmin=async(req,res)=>{
  
 }
 
+//@des Get Authenticated admin details
+//@route POST /api/admin/
+//@access private
 export const getAdmin=(req,res)=>{
-    
-}
+    const admin=req.user;
 
-export const logoutAdmin=(req,res)=>{
-    
+    const getAdminQuery="select * from admins where a_id=?";
+
+    db.query(getAdminQuery,[admin.id],async (err,data)=>{
+        res.json(
+            {
+                a_id:data[0].a_id,
+                a_username:data[0].a_username,
+                a_email:data[0].a_email,
+            }
+        ).status(200);
+
+    })
 }
 
 const generateToken=(id)=>{
