@@ -4,7 +4,7 @@ import {addCourse,asignUser,deleteCourse,dischargeUser,listAllCourses,listUserCo
 const router =express.Router();
 
 router.post("/add",addCourse);
-router.delete("/delete",deleteCourse);
+router.delete("/delete/:id",deleteCourse);
 router.put("/update",updateCourse);
 router.post("/asign",asignUser);
 router.post("/discharge",dischargeUser);

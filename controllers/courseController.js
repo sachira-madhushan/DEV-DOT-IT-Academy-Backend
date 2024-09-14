@@ -30,7 +30,29 @@ export const addCourse=(req,res)=>{
 }
 
 export const deleteCourse=(req,res)=>{
-
+    const courseID=req.params['id'];
+    const existQuery="select * from courses where c_id=?";
+    db.query(existQuery,[courseID],(err,data)=>{
+        if(data.length===0){
+            res.status(404).json({
+                message:"Course not found"
+            });
+        }else{
+            const deleteQuery="delete from courses where c_id=?";
+            db.query(deleteQuery,[courseID],(err,data)=>{
+                if(err){
+                    res.status(500).json({
+                        message:"Internal server error"
+                    })
+                }else{
+                    res.status(201).json({
+                        message:"Course deleted"
+                    })
+                }
+            })            
+        
+        }
+    })
 }
 
 export const updateCourse=(req,res)=>{
