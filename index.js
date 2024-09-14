@@ -2,7 +2,9 @@ import express from 'express';
 import adminRouter from './routes/adminRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import courseRouter from './routes/courseRoutes.js';
+import dotenv from 'dotenv'
 
+dotenv.config();
 const app=express();
 app.use(express.json());
 app.use("/api/admin",adminRouter);

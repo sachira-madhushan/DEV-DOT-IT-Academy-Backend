@@ -1,5 +1,6 @@
 import connectDB from "../config/database.js";
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 const db=connectDB();
 
@@ -24,7 +25,7 @@ export const registerAdmin=async(req,res)=>{
         if(err){
             res.status(500).json({
                 message:"Internal server error",
-                error:err
+                //error:err
             })
         }else{
             res.status(201).json({
@@ -34,8 +35,33 @@ export const registerAdmin=async(req,res)=>{
     })
 }
 
-export const loginAdmin=(req,res)=>{
+//@des Authenticate a admin
+//@route POST /api/admin/login
+//@access public
+export const loginAdmin=async(req,res)=>{
+    const {a_email,a_password}=req.body;
+    const existQuery="select * from admins where a_email=?";
 
+    db.query(existQuery,[a_email],async (err,data)=>{
+        if(data.length===0){
+            res.status(401).json({
+                message:"Incorrect email or password",
+            })
+        }else{
+            if(await bcrypt.compare(a_password,data[0].a_password)){
+                res.json(
+                    {
+                        a_username:data[0].a_username,
+                        a_email:data[0].a_email,
+                        token:generateToken(data[0].a_id)
+                    }
+                ).status(200);
+            }else{
+                res.json("Internal server error").status(500);
+            }
+        }
+    })
+ 
 }
 
 export const getAdmin=(req,res)=>{
@@ -44,4 +70,8 @@ export const getAdmin=(req,res)=>{
 
 export const logoutAdmin=(req,res)=>{
     
+}
+
+const generateToken=(id)=>{
+    return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:'30d'});
 }
