@@ -70,7 +70,22 @@ export const listAllCourses=(req,res)=>{
 }
 
 export const viewCourse=(req,res)=>{
+    const courseID=req.params['id'];
 
+    const existQuery="SELECT c.*, cc.* as chapters FROM courses AS c INNER JOIN course_chapters AS cc ON cc.c_id = c.c_id WHERE c.c_id = ?;";
+
+    db.query(existQuery,[courseID],(err,data)=>{
+        console.log(err);
+        if(data.length===0){
+            res.status(404).json({
+                message:"Course not found"
+            })
+        }else{
+            res.status(200).json({
+                course:data
+            })
+        }
+    })
 }
 
 export const asignUser=(req,res)=>{

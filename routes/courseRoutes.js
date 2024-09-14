@@ -10,6 +10,6 @@ router.post("/asign",asignUser);
 router.post("/discharge",dischargeUser);
 router.get("/all",listAllCourses);
 router.get("/courses",listUserCourses);
-router.get("/course",viewCourse);
+router.get("/course/:id",viewCourse);
 
 export default router;
