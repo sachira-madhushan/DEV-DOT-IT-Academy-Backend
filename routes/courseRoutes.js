@@ -1,5 +1,6 @@
 import express from 'express';
 import {addCourse,asignUser,deleteCourse,updateChapter,dischargeUser,addChapter,listAllCourses,listUserCourses,updateCourse,viewCourse} from '../controllers/courseController.js';
+import { authenticateUser } from '../middlewares/authentication.js';
 
 const router =express.Router();
 
@@ -13,7 +14,8 @@ router.put("/updatechapter",updateChapter);
 router.post("/asign",asignUser);
 router.post("/discharge",dischargeUser);
 router.get("/all",listAllCourses);
-router.get("/courses",listUserCourses);
 router.get("/course/:id",viewCourse);
+
+router.get("/courses",authenticateUser,listUserCourses);
 
 export default router;

@@ -10,4 +10,5 @@ router.post("/register",registerAdmin);
 
 router.get("/",authenticateUser,getAdmin);
 
+
 export default router;
