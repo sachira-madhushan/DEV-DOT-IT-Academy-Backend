@@ -65,7 +65,7 @@ export const loginAdmin=async(req,res)=>{
 }
 
 export const getAdmin=(req,res)=>{
-
+    
 }
 
 export const logoutAdmin=(req,res)=>{
