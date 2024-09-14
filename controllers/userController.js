@@ -91,6 +91,18 @@ export const getUser = async (req, res) => {
     })
 }
 
+export const listUsers=(req,res)=>{
+    const getUsersQuery = "select u_username,u_fullname,u_birthday,u_phone,u_email from users";
+
+    db.query(getUsersQuery, [], async (err, data) => {
+        res.json(
+            {
+                users:data
+            }
+        ).status(200);
+
+    })
+}
 const generateToken=(id)=>{
     return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:'30d'});
 }
