@@ -271,5 +271,14 @@ export const dischargeUser = (req, res) => {
 }
 
 export const listUserCourses = (req, res) => {
+    const user=req.user;
+    const userID=user.id;
 
+    const listQuery="select * from enrollments where u_id=?"
+
+    db.query(listQuery,[userID],(err,data)=>{
+        res.status(200).json({
+            courses:data
+        })
+    })
 }
