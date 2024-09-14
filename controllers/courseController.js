@@ -28,6 +28,41 @@ export const addCourse=(req,res)=>{
         }
     })
 }
+export const addChapter=(req,res)=>{
+    const {c_id,chap_title,chap_description,chap_video} =req.body;
+    const values=[
+        c_id,chap_title,chap_description,chap_video
+    ];
+
+    const existQuery="select * from courses where c_id=?";
+    
+    db.query(existQuery,[c_id],(err,data)=>{
+        if(data.length===0){
+            res.status(404).json({
+                message:"Course not found"
+            })
+        }else{
+            const saveQuery="insert into course_chapters(c_id,chap_title,chap_description,chap_video) values(?)";
+            
+            db.query(saveQuery,[values],(err,data)=>{
+                if(!err){
+                    res.status(201).json({
+                        message:"New chaper added"
+                    })
+                }else{
+                    res.status(500).json({
+                        message:"Internal server error",
+                    })
+                }
+            })
+        }
+    })
+    
+    
+
+    
+    
+}
 
 export const deleteCourse=(req,res)=>{
     const courseID=req.params['id'];
