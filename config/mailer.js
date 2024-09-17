@@ -19,7 +19,7 @@ const sendPasswordEmail =(to,name,password,res)=>{
     const mailOptions={
         from:process.env.SMTP_MAIL,
         to:to,
-        subject:"DEV DOT IT Academy - Registraion Complete",
+        subject:"DEV DOT IT Academy - Registration Complete",
         template: 'StudentRegistrationEmail',
         context: {
             name:name,
@@ -29,10 +29,10 @@ const sendPasswordEmail =(to,name,password,res)=>{
 
     const handlebarOptions = {
         viewEngine: {
-          partialsDir: path.resolve('../models/'),
+          partialsDir: path.resolve('../DEV-DOT-IT-Academy-Backend/models/'),
           defaultLayout: false,
         },
-        viewPath: path.resolve('../models/'),
+        viewPath: path.resolve('../DEV-DOT-IT-Academy-Backend/models/'),
         extName: '.html',
       };
 
@@ -42,7 +42,7 @@ const sendPasswordEmail =(to,name,password,res)=>{
         if(err){
             res.status(500).send(err+info)
         }else{
-            res.status(200).send("Register Success!.Mail was sent successfuly!")
+            res.status(201).send("Register Success!.Mail was sent successfuly!")
         }
     })
 

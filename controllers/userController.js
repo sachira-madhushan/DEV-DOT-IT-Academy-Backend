@@ -2,6 +2,7 @@ import connectDB from "../config/database.js";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import generator from 'generate-password'
+import sendPasswordEmail from "../config/mailer.js";
 const db=connectDB();
 
 //@des register new user
@@ -18,8 +19,6 @@ export const registerUser = async (req, res) => {
         uppercase:true,
         strict:true
     })
-
-    console.log(u_password);
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(u_password, salt);
@@ -42,11 +41,14 @@ export const registerUser = async (req, res) => {
                 //error:err
             })
         } else {
-            res.status(201).json({
-                message: "User created",
-            })
+            // res.status(201).json({
+            //     message: "User created",
+            // })
+            sendPasswordEmail(u_email,u_username,u_password,res);
         }
     })
+
+    
 }
 
 //@des Authenticate a user
