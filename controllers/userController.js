@@ -1,14 +1,25 @@
 import connectDB from "../config/database.js";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-
+import generator from 'generate-password'
 const db=connectDB();
 
 //@des register new user
 //@route api/user/register
 //@access public
 export const registerUser = async (req, res) => {
-    const { u_username, u_email, u_password, u_fullname, u_phone, u_birthday } = req.body;
+    const { u_username, u_email, u_fullname, u_phone, u_birthday } = req.body;
+
+    const u_password=generator.generate({
+        length:12,
+        numbers:true,
+        symbols:true,
+        lowercase:true,
+        uppercase:true,
+        strict:true
+    })
+
+    console.log(u_password);
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(u_password, salt);
