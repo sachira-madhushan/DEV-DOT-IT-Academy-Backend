@@ -92,7 +92,7 @@ export const getUser = async (req, res) => {
 }
 
 export const listUsers=(req,res)=>{
-    const getUsersQuery = "select u_username,u_fullname,u_birthday,u_phone,u_email from users";
+    const getUsersQuery = "select u_id,u_username,u_fullname,u_birthday,u_phone,u_email from users";
 
     db.query(getUsersQuery, [], async (err, data) => {
         res.json(
@@ -103,6 +103,65 @@ export const listUsers=(req,res)=>{
 
     })
 }
+
+// //@desc Edit user details
+// //@route PUT api/user/edit/:id
+// //@access Public
+// export const editUser = async (req, res) => {
+//     const { id } = req.params;
+//     const { u_username, u_email, u_password, u_fullname, u_phone, u_birthday } = req.body;
+
+//     try {
+//         // Check if the user exists
+//         const checkUserQuery = "SELECT * FROM users WHERE id = ?";
+//         db.query(checkUserQuery, [id], async (err, results) => {
+//             if (err) {
+//                 return res.status(500).json({ message: "Internal server error" });
+//             }
+//             if (results.length === 0) {
+//                 return res.status(404).json({ message: "User not found" });
+//             }
+
+//             let hashedPassword = results[0].u_password;
+//             if (u_password) {
+//                 const salt = await bcrypt.genSalt(10);
+//                 hashedPassword = await bcrypt.hash(u_password, salt);
+//             }
+
+//             const updateQuery = `
+//                 UPDATE users 
+//                 SET u_username = ?, u_fullname = ?, u_birthday = ?, u_phone = ?, u_email = ?, u_password = ?
+//                 WHERE u_id = ?
+//             `;
+//             const values = [
+//                 u_username || results[0].u_username,
+//                 u_fullname || results[0].u_fullname,
+//                 u_birthday || results[0].u_birthday,
+//                 u_phone || results[0].u_phone,
+//                 u_email || results[0].u_email,
+//                 hashedPassword,
+//                 id
+//             ];
+
+//             db.query(updateQuery, values, (err, data) => {
+//                 if (err) {
+//                     return res.status(500).json({ message: "Internal server error" });
+//                 } else {
+//                     res.status(200).json({
+//                         message: "User updated successfully",
+//                     });
+//                 }
+//             });
+//         });
+//     } catch (error) {
+//         res.status(500).json({
+//             message: "Server error",
+//             error: error.message
+//         });
+//     }
+// };
+
+
 const generateToken=(id)=>{
     return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:'30d'});
 }
