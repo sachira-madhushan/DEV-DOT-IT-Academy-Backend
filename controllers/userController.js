@@ -104,6 +104,46 @@ export const getUser = async (req, res) => {
     })
 }
 
+//@des Get User By ID
+//@route POST /api/user/:id
+//@access public
+export const getUserByID = async (req, res) => {
+    const userID = req.params['id'];
+
+    const getUserQuery = "select * from users where u_id=?";
+
+    db.query(getUserQuery, [userID], async (err, data) => {
+        res.json(
+            {
+                u_username:data[0].u_username,
+                u_fullname:data[0].u_fullname,
+                u_birthday:data[0].u_birthday,
+                u_phone:data[0].u_phone,
+                u_email:data[0].u_email,
+            }
+        ).status(200);
+
+    })
+}
+
+//@des Get User By ID
+//@route POST /api/user/:id
+//@access public
+export const deleteUser = async (req, res) => {
+    const userID = req.params['id'];
+
+    const getUserQuery = "DELETE from users where u_id=?";
+
+    db.query(getUserQuery, [userID], async (err, data) => {
+        res.json(
+            {
+                message:"User Deleted!"
+            }
+        ).status(200);
+
+    })
+}
+
 export const listUsers=(req,res)=>{
     const getUsersQuery = "select u_id,u_username,u_fullname,u_birthday,u_phone,u_email from users";
 
