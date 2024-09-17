@@ -126,7 +126,7 @@ export const getUserByID = async (req, res) => {
     })
 }
 
-//@des Get User By ID
+//@des Delete User
 //@route POST /api/user/:id
 //@access public
 export const deleteUser = async (req, res) => {
