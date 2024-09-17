@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import generator from 'generate-password'
 import sendPasswordEmail from "../config/mailer.js";
-const db=connectDB();
+const db = connectDB();
 
 //@des register new user
 //@route api/user/register
@@ -11,13 +11,13 @@ const db=connectDB();
 export const registerUser = async (req, res) => {
     const { u_username, u_email, u_fullname, u_phone, u_birthday } = req.body;
 
-    const u_password=generator.generate({
-        length:12,
-        numbers:true,
-        symbols:true,
-        lowercase:true,
-        uppercase:true,
-        strict:true
+    const u_password = generator.generate({
+        length: 12,
+        numbers: true,
+        symbols: true,
+        lowercase: true,
+        uppercase: true,
+        strict: true
     })
 
     const salt = await bcrypt.genSalt(10);
@@ -44,11 +44,11 @@ export const registerUser = async (req, res) => {
             // res.status(201).json({
             //     message: "User created",
             // })
-            sendPasswordEmail(u_email,u_username,u_password,res);
+            sendPasswordEmail(u_email, u_username, u_password, res);
         }
     })
 
-    
+
 }
 
 //@des Authenticate a user
@@ -67,11 +67,11 @@ export const loginUser = async (req, res) => {
             if (await bcrypt.compare(u_password, data[0].u_password)) {
                 res.json(
                     {
-                        u_username:data[0].u_username,
-                        u_fullname:data[0].u_fullname,
-                        u_birthday:data[0].u_birthday,
-                        u_phone:data[0].u_phone,
-                        u_email:data[0].u_email,
+                        u_username: data[0].u_username,
+                        u_fullname: data[0].u_fullname,
+                        u_birthday: data[0].u_birthday,
+                        u_phone: data[0].u_phone,
+                        u_email: data[0].u_email,
                         token: generateToken(data[0].u_id)
                     }
                 ).status(200);
@@ -93,11 +93,11 @@ export const getUser = async (req, res) => {
     db.query(getUserQuery, [user.id], async (err, data) => {
         res.json(
             {
-                u_username:data[0].u_username,
-                u_fullname:data[0].u_fullname,
-                u_birthday:data[0].u_birthday,
-                u_phone:data[0].u_phone,
-                u_email:data[0].u_email,
+                u_username: data[0].u_username,
+                u_fullname: data[0].u_fullname,
+                u_birthday: data[0].u_birthday,
+                u_phone: data[0].u_phone,
+                u_email: data[0].u_email,
             }
         ).status(200);
 
@@ -115,11 +115,13 @@ export const getUserByID = async (req, res) => {
     db.query(getUserQuery, [userID], async (err, data) => {
         res.json(
             {
-                u_username:data[0].u_username,
-                u_fullname:data[0].u_fullname,
-                u_birthday:data[0].u_birthday,
-                u_phone:data[0].u_phone,
-                u_email:data[0].u_email,
+                user: {
+                    u_username: data[0].u_username,
+                    u_fullname: data[0].u_fullname,
+                    u_birthday: data[0].u_birthday,
+                    u_phone: data[0].u_phone,
+                    u_email: data[0].u_email,
+                }
             }
         ).status(200);
 
@@ -137,20 +139,20 @@ export const deleteUser = async (req, res) => {
     db.query(getUserQuery, [userID], async (err, data) => {
         res.json(
             {
-                message:"User Deleted!"
+                message: "User Deleted!"
             }
         ).status(200);
 
     })
 }
 
-export const listUsers=(req,res)=>{
+export const listUsers = (req, res) => {
     const getUsersQuery = "select u_id,u_username,u_fullname,u_birthday,u_phone,u_email from users";
 
     db.query(getUsersQuery, [], async (err, data) => {
         res.json(
             {
-                users:data
+                users: data
             }
         ).status(200);
 
@@ -210,19 +212,19 @@ export const editUser = async (req, res) => {
 //@desc Edit user details
 //@route PUT api/user/edit/:id
 //@access Public
-export const userCount=async(req,res)=>{
+export const userCount = async (req, res) => {
     const countUser = "select count(u_id) as numOfUsers from users";
 
     db.query(countUser, [], async (err, data) => {
         res.json(
             {
-                count:data
+                count: data
             }
         ).status(200);
 
     })
 }
 
-const generateToken=(id)=>{
-    return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:'30d'});
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 }
