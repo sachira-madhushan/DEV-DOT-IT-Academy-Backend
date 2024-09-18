@@ -85,6 +85,110 @@ export const getAdmin=(req,res)=>{
     })
 }
 
+
+
+//@des Get Admin By ID
+//@route POST /api/admin/:id
+//@access public
+export const getAdminByID = async (req, res) => {
+    const userID = req.params['id'];
+
+    const getUserQuery = "select * from admins where a_id=?";
+
+    db.query(getUserQuery, [userID], async (err, data) => {
+        res.json(
+            {
+                user: {
+                    a_username: data[0].a_username,
+                    a_email: data[0].a_email,
+                }
+            }
+        ).status(200);
+
+    })
+}
+
+//@des Delete Admin
+//@route POST /api/admin/:id
+//@access public
+export const deleteAdmins = async (req, res) => {
+    const userID = req.params['id'];
+
+    const getUserQuery = "DELETE from admins where a_id=?";
+
+    db.query(getUserQuery, [userID], async (err, data) => {
+        res.json(
+            {
+                message: "Admin Deleted!"
+            }
+        ).status(200);
+
+    })
+}
+
+//@des List Admins
+//@route POST /api/admin/all
+//@access public
+export const listAdmins = (req, res) => {
+    const getUsersQuery = "select a_id,a_username,a_email from admins";
+
+    db.query(getUsersQuery, [], async (err, data) => {
+        res.json(
+            {
+                admins: data
+            }
+        ).status(200);
+
+    })
+}
+
+//@desc Edit Admin details
+//@route PUT api/admin/:id
+//@access Public
+export const editAdmin = async (req, res) => {
+    const { id } = req.params;
+    const { a_username, a_email } = req.body;
+
+    try {
+        const checkUserQuery = "SELECT * FROM admins WHERE a_id = ?";
+        db.query(checkUserQuery, [id], async (err, results) => {
+            if (err) {
+                return res.status(500).json({ message: "Internal server error" });
+            }
+            if (results.length === 0) {
+                return res.status(404).json({ message: "User not found" });
+            }
+
+
+            const updateQuery = `
+                UPDATE admins 
+                SET a_username = ?,a_email = ?
+                WHERE a_id = ?
+            `;
+            const values = [
+                a_username || results[0].a_username,
+                a_email || results[0].a_email,
+                id
+            ];
+
+            db.query(updateQuery, values, (err, data) => {
+                if (err) {
+                    return res.status(500).json({ message: "Internal server error" });
+                } else {
+                    res.status(200).json({
+                        message: "Admin updated successfully",
+                    });
+                }
+            });
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Server error",
+            error: error.message
+        });
+    }
+};
+
 const generateToken=(id)=>{
     return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:'30d'});
 }
