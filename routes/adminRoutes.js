@@ -7,11 +7,14 @@ const router =express.Router();
 router.post("/login",loginAdmin);
 router.post("/register",registerAdmin);
 
-router.get("/",authenticateUser,getAdmin);
 
 router.get("/all",listAdmins);
 router.get("/:id",getAdminByID);
 router.delete("/:id",deleteAdmins);
 router.put("/:id",editAdmin);
+
+router.get("/",authenticateUser,getAdmin);
+
+
 
 export default router;

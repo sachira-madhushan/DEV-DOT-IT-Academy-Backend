@@ -65,20 +65,17 @@ export const loginAdmin=async(req,res)=>{
  
 }
 
-//@des Get Authenticated admin details
-//@route POST /api/admin/
-//@access private
-export const getAdmin=(req,res)=>{
-    const admin=req.user;
 
-    const getAdminQuery="select * from admins where a_id=?";
+//@des List Admins
+//@route POST /api/admin/all
+//@access public
+export const listAdmins = (req, res) => {
+    const getUsersQuery = "select a_id,a_username,a_email from admins";
 
-    db.query(getAdminQuery,[admin.id],async (err,data)=>{
+    db.query(getUsersQuery, [], async (err, data) => {
         res.json(
             {
-                a_id:data[0].a_id,
-                a_username:data[0].a_username,
-                a_email:data[0].a_email,
+                admins: data
             }
         ).status(200);
 
@@ -126,21 +123,7 @@ export const deleteAdmins = async (req, res) => {
     })
 }
 
-//@des List Admins
-//@route POST /api/admin/all
-//@access public
-export const listAdmins = (req, res) => {
-    const getUsersQuery = "select a_id,a_username,a_email from admins";
 
-    db.query(getUsersQuery, [], async (err, data) => {
-        res.json(
-            {
-                admins: data
-            }
-        ).status(200);
-
-    })
-}
 
 //@desc Edit Admin details
 //@route PUT api/admin/:id
@@ -188,6 +171,28 @@ export const editAdmin = async (req, res) => {
         });
     }
 };
+
+
+//@des Get Authenticated admin details
+//@route POST /api/admin/
+//@access private
+export const getAdmin=(req,res)=>{
+    const admin=req.user;
+
+    const getAdminQuery="select * from admins where a_id=?";
+
+    db.query(getAdminQuery,[admin.id],async (err,d)=>{
+        res.json(
+            {
+                a_id:d[0].a_id,
+                a_username:d[0].a_username,
+                a_email:d[0].a_email,
+            }
+        ).status(200);
+
+    })
+}
+
 
 const generateToken=(id)=>{
     return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:'30d'});

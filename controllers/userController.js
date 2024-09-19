@@ -209,8 +209,8 @@ export const editUser = async (req, res) => {
     }
 };
 
-//@desc Edit user details
-//@route PUT api/user/edit/:id
+//@desc Get user count
+//@route GET api/user/count
 //@access Public
 export const userCount = async (req, res) => {
     const countUser = "select count(u_id) as numOfUsers from users";

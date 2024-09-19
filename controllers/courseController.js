@@ -282,3 +282,36 @@ export const listUserCourses = (req, res) => {
         })
     })
 }
+
+export const listEnrollments = (req, res) => {
+
+    const listQuery="select * from enrollments"
+
+    db.query(listQuery,[],(err,data)=>{
+        res.status(200).json({
+            enrollments:data
+        })
+    })
+}
+export const deleteEnrollment = (req, res) => {
+    const {id}=req.params;
+    const deleteQuery="delete from enrollments where e_id=?"
+
+    db.query(deleteQuery,[id],(err,data)=>{
+        res.status(200).json({
+            message:"Enrollment Deleted!"
+        })
+    })
+}
+export const courseCount = async (req, res) => {
+    const countCourses = "select count(c_id) as numberOfCourses from courses";
+
+    db.query(countCourses, [], async (err, data) => {
+        res.json(
+            {
+                count: data
+            }
+        ).status(200);
+
+    })
+}
