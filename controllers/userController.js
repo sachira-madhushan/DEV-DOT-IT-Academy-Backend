@@ -14,6 +14,7 @@ export const registerUser = async (req, res) => {
     const u_password = generator.generate({
         length: 12,
         numbers: true,
+        symbols: true,
         lowercase: true,
         uppercase: true,
         strict: true
