@@ -17,7 +17,7 @@ router.get("/all",listAllCourses);
 router.get("/course/:id",viewCourse);
 router.get("/count",courseCount);
 
-router.get("/courses",authenticateUser,listUserCourses);
+router.get("/courses/:id",listUserCourses);
 
 router.get("/enrollments",listEnrollments)
 router.delete("/enrollments/:id",deleteEnrollment)

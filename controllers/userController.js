@@ -62,7 +62,7 @@ export const loginUser = async (req, res) => {
         if (err) {
             res.status(500).json({ message: "Database query error" });
             return;
-        }
+        }   
 
         if (data.length === 0) {
             res.status(401).json({
@@ -73,6 +73,7 @@ export const loginUser = async (req, res) => {
             
             if (passwordMatch) {
                 res.status(200).json({
+                    u_id: data[0].u_id,
                     u_username: data[0].u_username,
                     u_fullname: data[0].u_fullname,
                     u_birthday: data[0].u_birthday,
@@ -114,7 +115,7 @@ export const getUser = async (req, res) => {
 //@access public
 export const getUserByID = async (req, res) => {
     const userID = req.params['id'];
-
+    
     const getUserQuery = "select * from users where u_id=?";
 
     db.query(getUserQuery, [userID], async (err, data) => {

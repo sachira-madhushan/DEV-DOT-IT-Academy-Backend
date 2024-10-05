@@ -103,7 +103,7 @@ export const updateCourse = (req, res) => {
             return res.status(404).json({
                 message: "Course not found"
             });
-        } 
+        }
 
         const updateQuery = `UPDATE courses 
                              SET c_title = ?, c_description = ?, c_price = ?, c_instructor = ?, c_banner = ?, c_intro = ? 
@@ -140,7 +140,7 @@ export const updateCourse = (req, res) => {
     });
 }
 
-export const updateChapter=(req,res)=>{
+export const updateChapter = (req, res) => {
     const { chap_id, c_id, chap_title, chap_description, chap_video } = req.body;
     const existCourseQuery = "SELECT * FROM courses WHERE c_id = ?";
 
@@ -271,35 +271,43 @@ export const dischargeUser = (req, res) => {
 }
 
 export const listUserCourses = (req, res) => {
-    const user=req.user;
-    const userID=user.id;
+    const { id } = req.params;
 
-    const listQuery="select * from enrollments where u_id=?"
+    const listQuery = `
+        SELECT c.* 
+        FROM courses AS c 
+        INNER JOIN enrollments AS e ON c.c_id = e.c_id 
+        WHERE e.u_id = ?;
+    `;
 
-    db.query(listQuery,[userID],(err,data)=>{
-        res.status(200).json({
-            courses:data
-        })
-    })
+    db.query(listQuery, [id], (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: "Error fetching user courses" });
+        }
+
+        return res.status(200).json({
+            course: data
+        });
+    });
 }
 
 export const listEnrollments = (req, res) => {
 
-    const listQuery="select * from enrollments"
+    const listQuery = "select * from enrollments"
 
-    db.query(listQuery,[],(err,data)=>{
+    db.query(listQuery, [], (err, data) => {
         res.status(200).json({
-            enrollments:data
+            enrollments: data
         })
     })
 }
 export const deleteEnrollment = (req, res) => {
-    const {id}=req.params;
-    const deleteQuery="delete from enrollments where e_id=?"
+    const { id } = req.params;
+    const deleteQuery = "delete from enrollments where e_id=?"
 
-    db.query(deleteQuery,[id],(err,data)=>{
+    db.query(deleteQuery, [id], (err, data) => {
         res.status(200).json({
-            message:"Enrollment Deleted!"
+            message: "Enrollment Deleted!"
         })
     })
 }
