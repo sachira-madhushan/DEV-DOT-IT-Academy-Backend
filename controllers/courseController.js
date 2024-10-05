@@ -285,8 +285,27 @@ export const listUserCourses = (req, res) => {
             return res.status(500).json({ error: "Error fetching user courses" });
         }
 
-        return res.status(200).json({
+        return res.status(200).json({   
             course: data
+        });
+    });
+}
+
+
+export const checkEnrollment = (req, res) => {
+    const { u_id,c_id } = req.body;
+
+    const listQuery = `
+        SELECT count(*)as count from enrollments where u_id=? and c_id=?;
+    `;
+
+    db.query(listQuery, [u_id,c_id], (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: "Error fetching user courses" });
+        }
+
+        return res.status(200).json({   
+            data
         });
     });
 }

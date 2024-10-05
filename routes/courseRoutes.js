@@ -1,5 +1,5 @@
 import express from 'express';
-import {addCourse,asignUser,deleteCourse,updateChapter,dischargeUser,deleteEnrollment,listEnrollments,addChapter,listAllCourses,courseCount,listUserCourses,updateCourse,viewCourse} from '../controllers/courseController.js';
+import {addCourse,asignUser,deleteCourse,checkEnrollment,updateChapter,dischargeUser,deleteEnrollment,listEnrollments,addChapter,listAllCourses,courseCount,listUserCourses,updateCourse,viewCourse} from '../controllers/courseController.js';
 import { authenticateUser } from '../middlewares/authentication.js';
 
 const router =express.Router();
@@ -20,6 +20,7 @@ router.get("/count",courseCount);
 router.get("/courses/:id",listUserCourses);
 
 router.get("/enrollments",listEnrollments)
+router.post("/check",checkEnrollment)
 router.delete("/enrollments/:id",deleteEnrollment)
 
 export default router;
