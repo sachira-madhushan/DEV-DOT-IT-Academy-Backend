@@ -12,10 +12,10 @@ DEV DOT IT Academy Backend Application
 
 <h1>Database</h1>
 
-<img src="https://github.com/sachira-madhushan/DEV-DOT-IT-Academy-Backend/blob/main/diagrams/1.png">
+<img src="https://github.com/sachira-madhushan/DEV-DOT-IT-Academy-Backend/blob/main/diagrams/1.PNG">
 
 <h1>Routes</h1>
 
 <img src="https://github.com/sachira-madhushan/DEV-DOT-IT-Academy-Backend/blob/main/diagrams/2.PNG">
 <img src="https://github.com/sachira-madhushan/DEV-DOT-IT-Academy-Backend/blob/main/diagrams/3.PNG">
-<img src="https://github.com/sachira-madhushan/DEV-DOT-IT-Academy-Backend/blob/main/diagrams/4.png">
+<img src="https://github.com/sachira-madhushan/DEV-DOT-IT-Academy-Backend/blob/main/diagrams/4.PNG">
